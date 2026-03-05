@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 
 interface ScrollAnimatedVideoProps {
@@ -25,10 +25,22 @@ export function ScrollAnimatedVideo({
   className,
 }: ScrollAnimatedVideoProps) {
   const sectionRef = useRef<HTMLElement>(null)
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [expanded, setExpanded] = useState(false)
   const [overlayVisible, setOverlayVisible] = useState(false)
+  const [detailsVisible, setDetailsVisible] = useState(false)
   const [isLoaded, setIsLoaded] = useState(!lazy)
   const [isMuted, setIsMuted] = useState(true)
+
+  const scheduleHide = useCallback(() => {
+    if (hideTimer.current) clearTimeout(hideTimer.current)
+    hideTimer.current = setTimeout(() => setDetailsVisible(false), 3500)
+  }, [])
+
+  const showDetails = useCallback(() => {
+    setDetailsVisible(true)
+    scheduleHide()
+  }, [scheduleHide])
 
   const mutedSrc = `https://player.vimeo.com/video/${vimeoId}?background=1&autoplay=1&loop=1&muted=1&byline=0&title=0&dnt=1`
   const unmutedSrc = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=0&byline=0&title=0&dnt=1&controls=0&autopause=0`
@@ -45,11 +57,16 @@ export function ScrollAnimatedVideo({
         if (inView) {
           if (lazy && !isLoaded) setIsLoaded(true)
           setExpanded(true)
-          const t = setTimeout(() => setOverlayVisible(true), 1100)
+          const t = setTimeout(() => {
+            setOverlayVisible(true)
+            showDetails()
+          }, 1100)
           return () => clearTimeout(t)
         } else if (entry.intersectionRatio < 0.1) {
           setExpanded(false)
           setOverlayVisible(false)
+          setDetailsVisible(false)
+          if (hideTimer.current) clearTimeout(hideTimer.current)
         }
       },
       { threshold: [0, 0.1, 0.6, 1.0] },
@@ -57,7 +74,19 @@ export function ScrollAnimatedVideo({
 
     observer.observe(section)
     return () => observer.disconnect()
-  }, [lazy, isLoaded])
+  }, [lazy, isLoaded, showDetails])
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section || !overlayVisible) return
+    const onMove = () => showDetails()
+    section.addEventListener('mousemove', onMove)
+    return () => section.removeEventListener('mousemove', onMove)
+  }, [overlayVisible, showDetails])
+
+  useEffect(() => {
+    return () => { if (hideTimer.current) clearTimeout(hideTimer.current) }
+  }, [])
 
   return (
     <section
@@ -107,7 +136,7 @@ export function ScrollAnimatedVideo({
         style={{
           background:
             'linear-gradient(to top, rgba(11,11,11,0.98) 0%, rgba(11,11,11,0.4) 60%, transparent 100%)',
-          opacity: overlayVisible ? 1 : 0,
+          opacity: detailsVisible ? 1 : 0,
           transition: 'opacity 0.8s ease',
         }}
       />
@@ -136,7 +165,15 @@ export function ScrollAnimatedVideo({
 
         {/* Mute toggle */}
         <button
-          onClick={() => setIsMuted(m => !m)}
+          onClick={() => {
+            const unmuting = isMuted // currently muted → about to unmute
+            setIsMuted(m => !m)
+            if (unmuting) {
+              // hide details immediately so video takes focus
+              setDetailsVisible(false)
+              if (hideTimer.current) clearTimeout(hideTimer.current)
+            }
+          }}
           className="ml-auto flex items-center gap-2 group"
           style={{
             background: 'rgba(11,11,11,0.55)',
@@ -199,10 +236,11 @@ export function ScrollAnimatedVideo({
       <div
         className="absolute bottom-0 left-0 right-0 px-16 pb-14 z-10"
         style={{
-          opacity: overlayVisible ? 1 : 0,
-          transform: overlayVisible ? 'translateY(0)' : 'translateY(16px)',
+          opacity: detailsVisible ? 1 : 0,
+          transform: detailsVisible ? 'translateY(0)' : 'translateY(16px)',
           transition:
             'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
+          pointerEvents: detailsVisible ? 'auto' : 'none',
         }}
       >
         <p
@@ -212,8 +250,6 @@ export function ScrollAnimatedVideo({
             letterSpacing: '0.28em',
             textTransform: 'uppercase',
             marginBottom: '10px',
-            opacity: overlayVisible ? 1 : 0,
-            transition: 'opacity 0.7s ease 0.1s',
           }}
         >
           {location}
@@ -227,10 +263,6 @@ export function ScrollAnimatedVideo({
             letterSpacing: '-0.025em',
             lineHeight: 1.0,
             marginBottom: '14px',
-            opacity: overlayVisible ? 1 : 0,
-            transform: overlayVisible ? 'translateY(0)' : 'translateY(10px)',
-            transition:
-              'opacity 0.8s ease 0.18s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.18s',
           }}
         >
           {title}
@@ -244,10 +276,6 @@ export function ScrollAnimatedVideo({
             maxWidth: '420px',
             fontWeight: 300,
             marginBottom: '18px',
-            opacity: overlayVisible ? 1 : 0,
-            transform: overlayVisible ? 'translateY(0)' : 'translateY(6px)',
-            transition:
-              'opacity 0.8s ease 0.32s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.32s',
           }}
         >
           {description}
@@ -260,8 +288,6 @@ export function ScrollAnimatedVideo({
             fontSize: '10px',
             letterSpacing: '0.12em',
             color: '#5A5A5A',
-            opacity: overlayVisible ? 1 : 0,
-            transition: 'opacity 0.8s ease 0.44s',
           }}
         >
           Director · Cinematographer · Editor · Producer — Theja Mitta
