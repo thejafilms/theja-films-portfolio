@@ -1,5 +1,6 @@
 import { HeroBanner } from '@/components/ui/hero-banner'
 import { ScrollAnimatedVideo } from '@/components/ui/scroll-animated-video'
+import { SiteFooter } from '@/components/ui/site-footer'
 
 /* ── Film data ─────────────────────────────────────────
    Vimeo video IDs:
@@ -48,31 +49,36 @@ const FILMS = [
 
 export default function HomePage() {
   return (
-    <main className="snap-container">
+    <>
+      <main className="snap-container">
 
-      {/* ════════════════════════════════════════════════
-          SECTION 1 — HERO BANNER
-      ════════════════════════════════════════════════ */}
-      <HeroBanner />
+        {/* ════════════════════════════════════════════════
+            SECTION 1 — HERO BANNER
+        ════════════════════════════════════════════════ */}
+        <HeroBanner />
 
-      {/* ════════════════════════════════════════════════
-          SECTIONS 2–4 — FILM SHOWCASE
-      ════════════════════════════════════════════════ */}
-      {FILMS.map((film) => (
-        <ScrollAnimatedVideo
-          key={film.id}
-          id={film.id}
-          vimeoId={film.vimeoId}
-          title={film.title}
-          location={film.location}
-          description={film.description}
-          year={film.year}
-          category={film.category}
-          lazy={film.lazy}
-          thumbnail={film.thumbnail}
-        />
-      ))}
+        {/* ════════════════════════════════════════════════
+            SECTIONS 2–4 — FILM SHOWCASE
+        ════════════════════════════════════════════════ */}
+        {FILMS.map((film) => (
+          <ScrollAnimatedVideo
+            key={film.id}
+            id={film.id}
+            vimeoId={film.vimeoId}
+            title={film.title}
+            location={film.location}
+            description={film.description}
+            year={film.year}
+            category={film.category}
+            lazy={film.lazy}
+            thumbnail={film.thumbnail}
+          />
+        ))}
 
-    </main>
+      </main>
+
+      {/* Footer lives outside the snap container so it's always reachable */}
+      <SiteFooter />
+    </>
   )
 }

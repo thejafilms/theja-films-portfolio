@@ -167,7 +167,7 @@ export function ScrollAnimatedVideo({
 
       {/* ── Top bar: category/year + mute toggle ────── */}
       <div
-        className="absolute top-0 left-0 right-0 px-10 pt-10 flex items-start justify-between z-10"
+        className="absolute top-0 left-0 right-0 px-4 pt-6 sm:px-10 sm:pt-10 flex items-start justify-between z-10"
         style={{
           opacity: overlayVisible ? 1 : 0,
           transition: 'opacity 0.9s ease 0.2s',
@@ -258,7 +258,7 @@ export function ScrollAnimatedVideo({
 
       {/* ── Film detail overlay ──────────────────────── */}
       <div
-        className="absolute bottom-0 left-0 right-0 px-16 pb-14 z-10"
+        className="absolute bottom-0 left-0 right-0 px-6 pb-8 sm:px-16 sm:pb-14 z-10"
         style={{
           opacity: detailsVisible ? 1 : 0,
           transform: detailsVisible ? 'translateY(0)' : 'translateY(16px)',
