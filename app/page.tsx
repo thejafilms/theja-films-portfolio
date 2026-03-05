@@ -18,6 +18,7 @@ const FILMS = [
     year: '2025',
     category: 'Personal',
     lazy: false,
+    thumbnail: '/thumbnails/film-1.jpg',
   },
   {
     id: 'film-2',
@@ -29,6 +30,7 @@ const FILMS = [
     year: '2025',
     category: 'Personal',
     lazy: true,
+    thumbnail: '/thumbnails/film-2.jpg',
   },
   {
     id: 'film-3',
@@ -40,6 +42,7 @@ const FILMS = [
     year: '2025',
     category: 'Personal',
     lazy: true,
+    thumbnail: '/thumbnails/film-3.jpg',
   },
 ]
 
@@ -66,6 +69,7 @@ export default function HomePage() {
           year={film.year}
           category={film.category}
           lazy={film.lazy}
+          thumbnail={film.thumbnail}
         />
       ))}
 

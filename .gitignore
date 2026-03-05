@@ -34,6 +34,9 @@ screenshot-scroll.mjs
 # Original film grabs at root (copies live in public/film_grabs/)
 /film_grabs/
 
+# Original thumbnails at root (copies live in public/thumbnails/)
+/thumbnails/
+
 # IDE
 .vscode/
 .idea/

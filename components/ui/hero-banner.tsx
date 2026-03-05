@@ -17,14 +17,17 @@ interface Still {
 }
 
 const STILLS: Still[] = [
-  { src: '/film_grabs/grab-01.png', w: 3600, h: 2338, depth: 2.2, posClass: 'top-[4%]    left-[0%]',   rotation: '-1.8deg', size: 'w-[290px] h-[188px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
-  { src: '/film_grabs/grab-06.png', w: 3600, h: 2338, depth: 5.2, posClass: 'top-[1%]    right-[2%]',  rotation:  '2.0deg', size: 'w-[210px] h-[136px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
-  { src: '/film_grabs/grab-03.png', w: 3600, h: 2338, depth: 1.8, posClass: 'top-[33%]   left-[-1%]',  rotation: '-1.2deg', size: 'w-[250px] h-[162px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
-  { src: '/film_grabs/grab-07.png', w: 3600, h: 2338, depth: 6.2, posClass: 'top-[36%]   right-[0%]',  rotation:  '1.4deg', size: 'w-[195px] h-[127px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
-  { src: '/film_grabs/grab-05.png', w: 3600, h: 2338, depth: 3.8, posClass: 'top-[60%]   left-[1%]',   rotation: '-1.6deg', size: 'w-[270px] h-[175px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
-  { src: '/film_grabs/grab-08.png', w: 3600, h: 2338, depth: 3.2, posClass: 'top-[63%]   right-[1%]',  rotation:  '1.2deg', size: 'w-[240px] h-[156px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
-  { src: '/film_grabs/grab-02.png', w: 3600, h: 2338, depth: 2.8, posClass: 'bottom-[5%] left-[13%]',  rotation: '-0.9deg', size: 'w-[230px] h-[149px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
-  { src: '/film_grabs/grab-04.png', w: 3600, h: 2338, depth: 4.4, posClass: 'bottom-[7%] right-[12%]', rotation:  '1.1deg', size: 'w-[200px] h-[130px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  // Film 1 — This Is My Moment.. (Udupi & Gokarna)
+  { src: '/film_grabs/grab-01.png',   w: 3600, h: 2338, depth: 2.2, posClass: 'top-[4%]    left-[0%]',   rotation: '-1.8deg', size: 'w-[290px] h-[188px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-05.png',   w: 3600, h: 2338, depth: 1.8, posClass: 'top-[33%]   left-[-1%]',  rotation: '-1.2deg', size: 'w-[250px] h-[162px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-03.png',   w: 3600, h: 2338, depth: 2.8, posClass: 'bottom-[5%] left-[13%]',  rotation: '-0.9deg', size: 'w-[230px] h-[149px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  // Film 2 — Theyyam – A God Awakens (Kannur, Kerala)
+  { src: '/film_grabs/theyyam-1.jpg', w: 3840, h: 2160, depth: 5.2, posClass: 'top-[1%]    right-[2%]',  rotation:  '2.0deg', size: 'w-[210px] h-[136px]', filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens' },
+  { src: '/film_grabs/theyyam-2.jpg', w: 3840, h: 2160, depth: 6.2, posClass: 'top-[36%]   right-[0%]',  rotation:  '1.4deg', size: 'w-[195px] h-[127px]', filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens' },
+  { src: '/film_grabs/theyyam-3.jpg', w: 3840, h: 2160, depth: 4.4, posClass: 'bottom-[7%] right-[12%]', rotation:  '1.1deg', size: 'w-[200px] h-[130px]', filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens' },
+  // Film 3 — The Soul of Varanasi
+  { src: '/film_grabs/varanasi-1.png', w: 2145, h: 1688, depth: 3.8, posClass: 'top-[60%]   left-[1%]',  rotation: '-1.6deg', size: 'w-[270px] h-[175px]', filmId: 'film-3', filmTitle: 'The Soul of Varanasi' },
+  { src: '/film_grabs/varanasi-2.jpg', w: 3840, h: 2160, depth: 3.2, posClass: 'top-[63%]   right-[1%]', rotation:  '1.2deg', size: 'w-[240px] h-[156px]', filmId: 'film-3', filmTitle: 'The Soul of Varanasi' },
 ]
 
 function scrollToFilm(filmId: string) {

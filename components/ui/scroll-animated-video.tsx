@@ -12,6 +12,7 @@ interface ScrollAnimatedVideoProps {
   year?: string
   category?: string
   lazy?: boolean
+  thumbnail?: string
   className?: string
 }
 
@@ -24,6 +25,7 @@ export function ScrollAnimatedVideo({
   year,
   category,
   lazy = false,
+  thumbnail,
   className,
 }: ScrollAnimatedVideoProps) {
   const sectionRef = useRef<HTMLElement>(null)
@@ -33,6 +35,7 @@ export function ScrollAnimatedVideo({
   const [detailsVisible, setDetailsVisible] = useState(false)
   const [isLoaded, setIsLoaded] = useState(!lazy)
   const [isMuted, setIsMuted] = useState(true)
+  const [videoReady, setVideoReady] = useState(false)
 
   const scheduleHide = useCallback(() => {
     if (hideTimer.current) clearTimeout(hideTimer.current)
@@ -111,6 +114,22 @@ export function ScrollAnimatedVideo({
           willChange: 'width, height',
         }}
       >
+        {/* Thumbnail placeholder — visible until video player loads */}
+        {thumbnail && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={thumbnail}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              transform: 'scale(1.05)',
+              filter: 'brightness(0.65) saturate(0.85)',
+              opacity: videoReady ? 0 : 1,
+              transition: 'opacity 0.8s ease',
+            }}
+          />
+        )}
+
         {activeSrc ? (
           <iframe
             src={activeSrc}
@@ -121,6 +140,7 @@ export function ScrollAnimatedVideo({
               filter: 'brightness(0.65) saturate(0.85)',
             }}
             title={title}
+            onLoad={() => setVideoReady(true)}
           />
         ) : null}
 
