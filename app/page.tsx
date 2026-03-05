@@ -1,3 +1,4 @@
+import { IntroGate } from '@/components/ui/intro-gate'
 import { HeroBanner } from '@/components/ui/hero-banner'
 import { ScrollAnimatedVideo } from '@/components/ui/scroll-animated-video'
 import { SiteFooter } from '@/components/ui/site-footer'
@@ -49,7 +50,7 @@ const FILMS = [
 
 export default function HomePage() {
   return (
-    <>
+    <IntroGate>
       <main className="snap-container">
 
         {/* ════════════════════════════════════════════════
@@ -79,6 +80,6 @@ export default function HomePage() {
 
       {/* Footer lives outside the snap container so it's always reachable */}
       <SiteFooter />
-    </>
+    </IntroGate>
   )
 }
