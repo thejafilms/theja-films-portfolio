@@ -24,34 +24,39 @@ const STILLS = [
 
 /* ── Film data ─────────────────────────────────────────
    Vimeo video IDs:
-     1075800012 → This Is My Moment
-     1102712882 → Ramappa
-     1169827135 → Coastal Journey
+     1169827135 → This Is My Moment..   (Udupi & Gokarna)
+     1102712882 → Theyyam – A God Awakens  (Kannur, Kerala)
+     1075800012 → The Soul of Varanasi   (Varanasi)
 ──────────────────────────────────────────────────────── */
-function vimeoSrc(id: string) {
-  return `https://player.vimeo.com/video/${id}?background=1&autoplay=1&loop=1&muted=1&byline=0&title=0&dnt=1`
-}
-
 const FILMS = [
   {
-    title: 'This Is My Moment',
-    location: 'Udupi & Gokarna',
-    description: 'A cinematic moment by the sea.',
-    src: vimeoSrc('1075800012'),
+    vimeoId: '1169827135',
+    title: 'This Is My Moment..',
+    location: 'Udupi & Gokarna, India',
+    description:
+      'A cinematic portrait by the sea. An exploration of stillness, memory, and the feeling of coming back to where you belong.',
+    year: '2025',
+    category: 'Personal',
     lazy: false,
   },
   {
-    title: 'Ramappa',
-    location: 'Telangana',
-    description: 'A visual story around the historic Ramappa temple.',
-    src: vimeoSrc('1102712882'),
+    vimeoId: '1102712882',
+    title: 'Theyyam – A God Awakens',
+    location: 'Kannur, Kerala, India',
+    description:
+      'An ancient ritualistic performance from North Kerala where performers channel the energy of deities — filmed during late-night ceremonies and temple festivals in Kannur.',
+    year: '2025',
+    category: 'Personal',
     lazy: true,
   },
   {
-    title: 'Coastal Journey',
-    location: 'Karnataka Coast',
-    description: 'A cinematic exploration of coastal landscapes.',
-    src: vimeoSrc('1169827135'),
+    vimeoId: '1075800012',
+    title: 'The Soul of Varanasi',
+    location: 'Varanasi, India',
+    description:
+      '"Flames rise. The river flows. Life moves on." A personal journey through Dev Diwali — where death is embraced with faith, and every step holds deep reverence.',
+    year: '2025',
+    category: 'Personal',
     lazy: true,
   },
 ]
@@ -184,10 +189,12 @@ export default function HomePage() {
       {FILMS.map((film) => (
         <ScrollAnimatedVideo
           key={film.title}
-          src={film.src}
+          vimeoId={film.vimeoId}
           title={film.title}
           location={film.location}
           description={film.description}
+          year={film.year}
+          category={film.category}
           lazy={film.lazy}
         />
       ))}

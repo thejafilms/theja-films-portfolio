@@ -4,39 +4,35 @@ import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface ScrollAnimatedVideoProps {
-  /**
-   * Either a Vimeo player URL (iframe) or a direct video file URL.
-   * Vimeo: https://player.vimeo.com/video/VIDEO_ID?background=1&...
-   * Direct: https://example.com/video.mp4
-   */
-  src: string
-  poster?: string
+  vimeoId: string
   title: string
   location: string
   description: string
-  /** Defer loading until section is near viewport */
+  year?: string
+  category?: string
   lazy?: boolean
   className?: string
 }
 
-function isEmbedUrl(src: string) {
-  return src.includes('vimeo.com') || src.includes('youtube.com') || src.includes('youtu.be')
-}
-
 export function ScrollAnimatedVideo({
-  src,
-  poster,
+  vimeoId,
   title,
   location,
   description,
+  year,
+  category,
   lazy = false,
   className,
 }: ScrollAnimatedVideoProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const [expanded, setExpanded] = useState(false)
   const [overlayVisible, setOverlayVisible] = useState(false)
-  const [activeSrc, setActiveSrc] = useState(lazy ? '' : src)
-  const embed = isEmbedUrl(src)
+  const [isLoaded, setIsLoaded] = useState(!lazy)
+  const [isMuted, setIsMuted] = useState(true)
+
+  const mutedSrc = `https://player.vimeo.com/video/${vimeoId}?background=1&autoplay=1&loop=1&muted=1&byline=0&title=0&dnt=1`
+  const unmutedSrc = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=0&byline=0&title=0&dnt=1&controls=0&autopause=0`
+  const activeSrc = isLoaded ? (isMuted ? mutedSrc : unmutedSrc) : ''
 
   useEffect(() => {
     const section = sectionRef.current
@@ -47,7 +43,7 @@ export function ScrollAnimatedVideo({
         const inView = entry.isIntersecting && entry.intersectionRatio >= 0.6
 
         if (inView) {
-          if (lazy && !activeSrc) setActiveSrc(src)
+          if (lazy && !isLoaded) setIsLoaded(true)
           setExpanded(true)
           const t = setTimeout(() => setOverlayVisible(true), 1100)
           return () => clearTimeout(t)
@@ -61,7 +57,7 @@ export function ScrollAnimatedVideo({
 
     observer.observe(section)
     return () => observer.disconnect()
-  }, [src, lazy, activeSrc])
+  }, [lazy, isLoaded])
 
   return (
     <section
@@ -82,34 +78,18 @@ export function ScrollAnimatedVideo({
           willChange: 'width, height',
         }}
       >
-        {embed ? (
-          /* ── Vimeo / YouTube iframe ─────────────── */
-          activeSrc ? (
-            <iframe
-              src={activeSrc}
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-              className="absolute inset-0 w-full h-full border-0"
-              style={{
-                transform: 'scale(1.05)',
-                filter: 'brightness(0.65) saturate(0.85)',
-              }}
-              title={title}
-            />
-          ) : null
-        ) : (
-          /* ── HTML5 video ────────────────────────── */
-          <video
-            src={activeSrc || undefined}
-            poster={poster}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload={lazy ? 'none' : 'auto'}
-            className="w-full h-full object-cover"
-            style={{ filter: 'brightness(0.65) saturate(0.85)' }}
+        {activeSrc ? (
+          <iframe
+            src={activeSrc}
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+            className="absolute inset-0 w-full h-full border-0"
+            style={{
+              transform: 'scale(1.05)',
+              filter: 'brightness(0.65) saturate(0.85)',
+            }}
+            title={title}
           />
-        )}
+        ) : null}
 
         {/* Vignette */}
         <div
@@ -131,6 +111,89 @@ export function ScrollAnimatedVideo({
           transition: 'opacity 0.8s ease',
         }}
       />
+
+      {/* ── Top bar: category/year + mute toggle ────── */}
+      <div
+        className="absolute top-0 left-0 right-0 px-10 pt-10 flex items-start justify-between z-10"
+        style={{
+          opacity: overlayVisible ? 1 : 0,
+          transition: 'opacity 0.9s ease 0.2s',
+        }}
+      >
+        {/* Category + Year */}
+        {(category || year) && (
+          <p
+            className="font-body text-[#9A9A9A]"
+            style={{
+              fontSize: '9px',
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+            }}
+          >
+            {[category, year].filter(Boolean).join(' • ')}
+          </p>
+        )}
+
+        {/* Mute toggle */}
+        <button
+          onClick={() => setIsMuted(m => !m)}
+          className="ml-auto flex items-center gap-2 group"
+          style={{
+            background: 'rgba(11,11,11,0.55)',
+            border: '1px solid rgba(255,255,255,0.12)',
+            borderRadius: '2px',
+            padding: '6px 10px',
+            cursor: 'pointer',
+            backdropFilter: 'blur(6px)',
+          }}
+          aria-label={isMuted ? 'Unmute' : 'Mute'}
+        >
+          {isMuted ? (
+            /* Speaker off */
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#9A9A9A"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+          ) : (
+            /* Speaker on */
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#F2F2F2"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+          )}
+          <span
+            className="font-body"
+            style={{
+              fontSize: '9px',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: isMuted ? '#9A9A9A' : '#F2F2F2',
+            }}
+          >
+            {isMuted ? 'Sound off' : 'Sound on'}
+          </span>
+        </button>
+      </div>
 
       {/* ── Film detail overlay ──────────────────────── */}
       <div
@@ -178,8 +241,9 @@ export function ScrollAnimatedVideo({
           style={{
             fontSize: '14px',
             lineHeight: 1.75,
-            maxWidth: '380px',
+            maxWidth: '420px',
             fontWeight: 300,
+            marginBottom: '18px',
             opacity: overlayVisible ? 1 : 0,
             transform: overlayVisible ? 'translateY(0)' : 'translateY(6px)',
             transition:
@@ -187,6 +251,20 @@ export function ScrollAnimatedVideo({
           }}
         >
           {description}
+        </p>
+
+        {/* Credits */}
+        <p
+          className="font-body"
+          style={{
+            fontSize: '10px',
+            letterSpacing: '0.12em',
+            color: '#5A5A5A',
+            opacity: overlayVisible ? 1 : 0,
+            transition: 'opacity 0.8s ease 0.44s',
+          }}
+        >
+          Director · Cinematographer · Editor · Producer — Theja Mitta
         </p>
       </div>
 

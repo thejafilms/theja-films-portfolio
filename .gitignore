@@ -31,8 +31,8 @@ temporary screenshots/
 screenshot.mjs
 screenshot-scroll.mjs
 
-# Original film grabs (copies live in public/film_grabs/)
-film_grabs/
+# Original film grabs at root (copies live in public/film_grabs/)
+/film_grabs/
 
 # IDE
 .vscode/
