@@ -9,6 +9,7 @@ import { ScrollAnimatedVideo } from '@/components/ui/scroll-animated-video'
 ──────────────────────────────────────────────────────── */
 const FILMS = [
   {
+    id: 'film-1',
     vimeoId: '1169827135',
     title: 'This Is My Moment..',
     location: 'Udupi & Gokarna, India',
@@ -19,6 +20,7 @@ const FILMS = [
     lazy: false,
   },
   {
+    id: 'film-2',
     vimeoId: '1102712882',
     title: 'Theyyam – A God Awakens',
     location: 'Kannur, Kerala, India',
@@ -29,6 +31,7 @@ const FILMS = [
     lazy: true,
   },
   {
+    id: 'film-3',
     vimeoId: '1075800012',
     title: 'The Soul of Varanasi',
     location: 'Varanasi, India',
@@ -54,7 +57,8 @@ export default function HomePage() {
       ════════════════════════════════════════════════ */}
       {FILMS.map((film) => (
         <ScrollAnimatedVideo
-          key={film.title}
+          key={film.id}
+          id={film.id}
           vimeoId={film.vimeoId}
           title={film.title}
           location={film.location}

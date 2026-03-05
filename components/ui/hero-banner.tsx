@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import Image from 'next/image'
-import { motion, stagger, useAnimate } from 'motion/react'
+import { motion } from 'motion/react'
 import Floating, { FloatingElement } from '@/components/ui/parallax-floating'
 
 interface Still {
@@ -12,66 +11,105 @@ interface Still {
   depth: number
   posClass: string
   rotation: string
-  size: string // tailwind w-/h- classes for the element
+  size: string
+  filmId: string
+  filmTitle: string
 }
 
 const STILLS: Still[] = [
-  { src: '/film_grabs/grab-01.png', w: 3600, h: 2338, depth: 2.2, posClass: 'top-[4%]   left-[0%]',   rotation: '-1.8deg', size: 'w-[290px] h-[188px]' },
-  { src: '/film_grabs/grab-06.png', w: 3600, h: 2338, depth: 5.2, posClass: 'top-[1%]   right-[2%]',  rotation:  '2.0deg', size: 'w-[210px] h-[136px]' },
-  { src: '/film_grabs/grab-03.png', w: 3600, h: 2338, depth: 1.8, posClass: 'top-[33%]  left-[-1%]',  rotation: '-1.2deg', size: 'w-[250px] h-[162px]' },
-  { src: '/film_grabs/grab-07.png', w: 3600, h: 2338, depth: 6.2, posClass: 'top-[36%]  right-[0%]',  rotation:  '1.4deg', size: 'w-[195px] h-[127px]' },
-  { src: '/film_grabs/grab-05.png', w: 3600, h: 2338, depth: 3.8, posClass: 'top-[60%]  left-[1%]',   rotation: '-1.6deg', size: 'w-[270px] h-[175px]' },
-  { src: '/film_grabs/grab-08.png', w: 3600, h: 2338, depth: 3.2, posClass: 'top-[63%]  right-[1%]',  rotation:  '1.2deg', size: 'w-[240px] h-[156px]' },
-  { src: '/film_grabs/grab-02.png', w: 3600, h: 2338, depth: 2.8, posClass: 'bottom-[5%] left-[13%]', rotation: '-0.9deg', size: 'w-[230px] h-[149px]' },
-  { src: '/film_grabs/grab-04.png', w: 3600, h: 2338, depth: 4.4, posClass: 'bottom-[7%] right-[12%]',rotation:  '1.1deg', size: 'w-[200px] h-[130px]' },
+  { src: '/film_grabs/grab-01.png', w: 3600, h: 2338, depth: 2.2, posClass: 'top-[4%]    left-[0%]',   rotation: '-1.8deg', size: 'w-[290px] h-[188px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-06.png', w: 3600, h: 2338, depth: 5.2, posClass: 'top-[1%]    right-[2%]',  rotation:  '2.0deg', size: 'w-[210px] h-[136px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-03.png', w: 3600, h: 2338, depth: 1.8, posClass: 'top-[33%]   left-[-1%]',  rotation: '-1.2deg', size: 'w-[250px] h-[162px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-07.png', w: 3600, h: 2338, depth: 6.2, posClass: 'top-[36%]   right-[0%]',  rotation:  '1.4deg', size: 'w-[195px] h-[127px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-05.png', w: 3600, h: 2338, depth: 3.8, posClass: 'top-[60%]   left-[1%]',   rotation: '-1.6deg', size: 'w-[270px] h-[175px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-08.png', w: 3600, h: 2338, depth: 3.2, posClass: 'top-[63%]   right-[1%]',  rotation:  '1.2deg', size: 'w-[240px] h-[156px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-02.png', w: 3600, h: 2338, depth: 2.8, posClass: 'bottom-[5%] left-[13%]',  rotation: '-0.9deg', size: 'w-[230px] h-[149px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
+  { src: '/film_grabs/grab-04.png', w: 3600, h: 2338, depth: 4.4, posClass: 'bottom-[7%] right-[12%]', rotation:  '1.1deg', size: 'w-[200px] h-[130px]', filmId: 'film-1', filmTitle: 'This Is My Moment..' },
 ]
 
+function scrollToFilm(filmId: string) {
+  document.getElementById(filmId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 export function HeroBanner() {
-  const [scope, animate] = useAnimate()
-
-  useEffect(() => {
-    // Stagger film stills in first, then reveal text
-    animate(
-      '.film-still',
-      { opacity: [0, 1], scale: [0.96, 1] },
-      { duration: 0.7, delay: stagger(0.1), ease: [0.16, 1, 0.3, 1] },
-    )
-  }, [animate])
-
   return (
-    <section
-      ref={scope}
-      className="snap-section relative overflow-hidden bg-[#0B0B0B]"
-    >
-      <Floating sensitivity={-1} easingFactor={0.04} className="overflow-hidden">
+    <section className="snap-section relative overflow-hidden bg-[#0B0B0B]">
 
+      <Floating sensitivity={-1} easingFactor={0.04} className="overflow-hidden">
         {STILLS.map((still, i) => (
-          <FloatingElement
-            key={i}
-            depth={still.depth}
-            className={still.posClass}
-          >
-            <div
-              className={`film-still floating-still overflow-hidden ${still.size}`}
-              style={{
-                opacity: 0,
-                transform: `rotate(${still.rotation})`,
-                boxShadow: '0 12px 48px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.4)',
+          <FloatingElement key={i} depth={still.depth} className={still.posClass}>
+
+            {/* Outer: entry opacity + rotation + hover state propagation + click */}
+            <motion.div
+              className="cursor-pointer"
+              style={{ rotate: still.rotation }}
+              custom={i}
+              initial="hidden"
+              animate="visible"
+              whileHover="hovered"
+              onClick={() => scrollToFilm(still.filmId)}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: (i: number) => ({
+                  opacity: 1,
+                  transition: { delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+                }),
+                hovered: { opacity: 1 },
               }}
             >
-              <Image
-                src={still.src}
-                width={still.w}
-                height={still.h}
-                alt=""
-                className="w-full h-full object-cover"
-                style={{ filter: 'saturate(0.8) brightness(0.88)' }}
-                priority={i < 4}
-              />
-            </div>
+              {/* Inner: scale + shadow animation */}
+              <motion.div
+                className={`floating-still overflow-hidden relative ${still.size}`}
+                custom={i}
+                variants={{
+                  hidden: { scale: 0.96, boxShadow: '0 12px 48px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.4)' },
+                  visible: (i: number) => ({
+                    scale: 1,
+                    boxShadow: '0 12px 48px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.4)',
+                    transition: { delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+                  }),
+                  hovered: {
+                    scale: 1.06,
+                    boxShadow: '0 22px 64px rgba(0,0,0,0.88), 0 4px 18px rgba(0,0,0,0.6)',
+                    transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+                  },
+                }}
+              >
+                <Image
+                  src={still.src}
+                  width={still.w}
+                  height={still.h}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  style={{ filter: 'saturate(0.8) brightness(0.88)' }}
+                  priority={i < 4}
+                />
+
+                {/* Film title label — slides up on hover */}
+                <motion.div
+                  className="absolute bottom-0 inset-x-0"
+                  style={{
+                    padding: '32px 10px 8px',
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)',
+                  }}
+                  variants={{
+                    hidden:  { opacity: 0, y: 6 },
+                    visible: { opacity: 0, y: 6 },
+                    hovered: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } },
+                  }}
+                >
+                  <p
+                    className="font-body text-center text-[#F2F2F2]"
+                    style={{ fontSize: '7px', letterSpacing: '0.28em', textTransform: 'uppercase' }}
+                  >
+                    {still.filmTitle}
+                  </p>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+
           </FloatingElement>
         ))}
-
       </Floating>
 
       {/* Radial vignette */}
@@ -84,7 +122,7 @@ export function HeroBanner() {
       />
 
       {/* Center text */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6 text-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6 text-center pointer-events-none">
 
         <motion.h1
           className="font-heading text-[#F2F2F2]"

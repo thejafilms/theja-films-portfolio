@@ -43,11 +43,11 @@ body::after {
 
 /* ── Floating still hover ───────────────────────────────── */
 .floating-still img {
-  transition: filter 0.6s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: filter 0.6s ease;
 }
 .floating-still:hover img {
-  filter: saturate(0.85) brightness(0.88) !important;
-  transform: scale(1.05);
+  /* Color reveal: bring image to near-natural saturation/brightness */
+  filter: saturate(1) brightness(0.95) !important;
 }
 
 /* ── Scroll snap container ──────────────────────────────── */

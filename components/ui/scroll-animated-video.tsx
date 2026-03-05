@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 
 interface ScrollAnimatedVideoProps {
+  id?: string
   vimeoId: string
   title: string
   location: string
@@ -15,6 +16,7 @@ interface ScrollAnimatedVideoProps {
 }
 
 export function ScrollAnimatedVideo({
+  id,
   vimeoId,
   title,
   location,
@@ -91,6 +93,7 @@ export function ScrollAnimatedVideo({
 
   return (
     <section
+      id={id}
       ref={sectionRef}
       className={cn(
         'snap-section relative flex items-center justify-center bg-[#0B0B0B] overflow-hidden',
