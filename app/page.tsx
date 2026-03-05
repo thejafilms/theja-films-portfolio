@@ -19,7 +19,7 @@ const FILMS = [
     year: '2025',
     category: 'Personal',
     lazy: false,
-    thumbnail: '/thumbnails/film-1.jpg',
+    thumbnail: '/thumbnails/beachtjumbnail_2.3.2.jpg',
   },
   {
     id: 'film-2',
