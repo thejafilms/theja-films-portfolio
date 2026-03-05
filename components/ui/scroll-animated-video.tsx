@@ -66,6 +66,7 @@ export function ScrollAnimatedVideo({
           setExpanded(false)
           setOverlayVisible(false)
           setDetailsVisible(false)
+          setIsMuted(true) // stop audio when scrolled away
           if (hideTimer.current) clearTimeout(hideTimer.current)
         }
       },
