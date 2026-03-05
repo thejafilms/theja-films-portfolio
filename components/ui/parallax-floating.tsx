@@ -2,81 +2,130 @@
 
 import {
   createContext,
+  ReactNode,
+  useCallback,
   useContext,
   useEffect,
-  useState,
-  type ReactNode,
+  useRef,
 } from 'react'
+import { useAnimationFrame } from 'motion/react'
+
 import { cn } from '@/lib/utils'
+import { useMousePositionRef } from '@/hooks/use-mouse-position-ref'
 
-/* ── Mouse context ─────────────────────────────────────── */
-
-interface MouseOffset {
-  x: number // -1 to 1
-  y: number // -1 to 1
+interface FloatingContextType {
+  registerElement: (id: string, element: HTMLDivElement, depth: number) => void
+  unregisterElement: (id: string) => void
 }
 
-const ParallaxContext = createContext<MouseOffset>({ x: 0, y: 0 })
+const FloatingContext = createContext<FloatingContextType | null>(null)
 
-/* ── ParallaxFloating ──────────────────────────────────── */
-// Wrap the hero section — tracks mouse and provides offset to children.
-
-interface ParallaxFloatingProps {
+interface FloatingProps {
   children: ReactNode
   className?: string
+  sensitivity?: number
+  easingFactor?: number
 }
 
-export function ParallaxFloating({ children, className }: ParallaxFloatingProps) {
-  const [mouse, setMouse] = useState<MouseOffset>({ x: 0, y: 0 })
+const Floating = ({
+  children,
+  className,
+  sensitivity = 1,
+  easingFactor = 0.05,
+  ...props
+}: FloatingProps) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const elementsMap = useRef(
+    new Map<
+      string,
+      {
+        element: HTMLDivElement
+        depth: number
+        currentPosition: { x: number; y: number }
+      }
+    >(),
+  )
+  const mousePositionRef = useMousePositionRef(containerRef)
 
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      setMouse({
-        x: (e.clientX / window.innerWidth - 0.5) * 2,
-        y: (e.clientY / window.innerHeight - 0.5) * 2,
+  const registerElement = useCallback(
+    (id: string, element: HTMLDivElement, depth: number) => {
+      elementsMap.current.set(id, {
+        element,
+        depth,
+        currentPosition: { x: 0, y: 0 },
       })
-    }
-    window.addEventListener('mousemove', onMove)
-    return () => window.removeEventListener('mousemove', onMove)
+    },
+    [],
+  )
+
+  const unregisterElement = useCallback((id: string) => {
+    elementsMap.current.delete(id)
   }, [])
 
+  useAnimationFrame(() => {
+    if (!containerRef.current) return
+
+    const rect = containerRef.current.getBoundingClientRect()
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+
+    elementsMap.current.forEach((data) => {
+      const strength = (data.depth * sensitivity) / 20
+
+      // Offset from center so the neutral resting position is undisturbed
+      const newTargetX = (mousePositionRef.current.x - centerX) * strength
+      const newTargetY = (mousePositionRef.current.y - centerY) * strength
+
+      const dx = newTargetX - data.currentPosition.x
+      const dy = newTargetY - data.currentPosition.y
+
+      data.currentPosition.x += dx * easingFactor
+      data.currentPosition.y += dy * easingFactor
+
+      data.element.style.transform = `translate3d(${data.currentPosition.x}px, ${data.currentPosition.y}px, 0)`
+    })
+  })
+
   return (
-    <ParallaxContext.Provider value={mouse}>
-      <div className={cn('relative w-full h-full', className)}>
+    <FloatingContext.Provider value={{ registerElement, unregisterElement }}>
+      <div
+        ref={containerRef}
+        className={cn('absolute top-0 left-0 w-full h-full', className)}
+        {...props}
+      >
         {children}
       </div>
-    </ParallaxContext.Provider>
+    </FloatingContext.Provider>
   )
 }
 
-/* ── FloatingElement ───────────────────────────────────── */
-// Place inside <ParallaxFloating>. Position via className.
-// depth: 0.1 (barely moves) → 1.0 (moves a lot)
+export default Floating
 
 interface FloatingElementProps {
-  depth?: number
-  className?: string
   children: ReactNode
+  className?: string
+  depth?: number
 }
 
-export function FloatingElement({
-  depth = 0.4,
-  className,
+export const FloatingElement = ({
   children,
-}: FloatingElementProps) {
-  const mouse = useContext(ParallaxContext)
+  className,
+  depth = 1,
+}: FloatingElementProps) => {
+  const elementRef = useRef<HTMLDivElement>(null)
+  const idRef = useRef(Math.random().toString(36).substring(7))
+  const context = useContext(FloatingContext)
 
-  const tx = mouse.x * depth * 28
-  const ty = mouse.y * depth * 20
+  useEffect(() => {
+    if (!elementRef.current || !context) return
+    context.registerElement(idRef.current, elementRef.current, depth ?? 0.01)
+    return () => context.unregisterElement(idRef.current)
+  }, [depth, context])
 
   return (
     <div
-      className={cn('absolute', className)}
-      style={{
-        transform: `translate(${tx}px, ${ty}px)`,
-        transition: 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        willChange: 'transform',
-      }}
+      ref={elementRef}
+      className={cn('absolute will-change-transform', className)}
     >
       {children}
     </div>
