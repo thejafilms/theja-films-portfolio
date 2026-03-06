@@ -158,11 +158,17 @@ function scrollToFilm(filmId: string) {
 
 /* ── background-clip tile grid (3 cols × 6 rows = 18 cells) ──────────────
    Each image fills exactly one 33.33%×16.67% cell of the heading element.
-   The cells are clipped to letter shapes by  background-clip: text.       */
+   The cells are clipped to letter shapes by  background-clip: text.
+   Uses /_next/image optimised URLs (w=640, q=75) — the same URLs that
+   page.tsx preloads, so images are already cached by the time this
+   component mounts (after the ~3.5 s intro).  No loading buffer.         */
 const COL_POS = ['0%', '50%', '100%']
 const ROW_POS = ['0%', '20%', '40%', '60%', '80%', '100%']
 
-const tileBgImage    = STILLS.map(s => `url(${s.src})`).join(', ')
+const imgUrl = (src: string) =>
+  `/_next/image?url=${encodeURIComponent(src)}&w=640&q=75`
+
+const tileBgImage    = STILLS.map(s => `url(${imgUrl(s.src)})`).join(', ')
 const tileBgSize     = STILLS.map(() => '33.33% 16.67%').join(', ')
 const tileBgPosition = STILLS.map((_, i) => `${COL_POS[i % 3]} ${ROW_POS[Math.floor(i / 3)]}`).join(', ')
 const tileBgRepeat   = STILLS.map(() => 'no-repeat').join(', ')
@@ -230,7 +236,7 @@ export function HeroBanner() {
                   alt=""
                   className="w-full h-full object-cover"
                   style={{ filter: 'saturate(0.8) brightness(0.88)' }}
-                  priority={i < 4}
+                  priority={i < 9}
                 />
                 <motion.div
                   className="absolute bottom-0 inset-x-0"
