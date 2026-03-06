@@ -258,8 +258,9 @@ export function ScrollAnimatedVideo({
 
       {/* ── Film detail overlay ──────────────────────── */}
       <div
-        className="absolute bottom-0 left-0 right-0 px-6 pb-8 sm:px-16 sm:pb-14 z-10"
+        className="absolute bottom-0 left-0 right-0 px-6 sm:px-16 z-10"
         style={{
+          paddingBottom: 'calc(40px + env(safe-area-inset-bottom, 0px))',
           opacity: detailsVisible ? 1 : 0,
           transform: detailsVisible ? 'translateY(0)' : 'translateY(16px)',
           transition:
@@ -282,7 +283,7 @@ export function ScrollAnimatedVideo({
         <h2
           className="font-heading text-[#F2F2F2]"
           style={{
-            fontSize: 'clamp(38px, 5.5vw, 82px)',
+            fontSize: 'clamp(24px, 5.5vw, 82px)',
             fontWeight: 400,
             letterSpacing: '-0.025em',
             lineHeight: 1.0,

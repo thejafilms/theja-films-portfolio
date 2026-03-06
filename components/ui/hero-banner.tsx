@@ -131,7 +131,7 @@ const tileBgPosition = STILLS.map((_, i) => `${COL_POS[i % 4]} ${ROW_POS[Math.fl
 const tileBgRepeat   = STILLS.map(() => 'no-repeat').join(', ')
 
 const H1_STYLE = {
-  fontSize:      'clamp(56px, 9.5vw, 130px)',
+  fontSize:      'clamp(44px, 9.5vw, 130px)',
   fontWeight:    400,
   letterSpacing: '-0.03em',
   lineHeight:    1.0,
@@ -298,7 +298,8 @@ export function HeroBanner() {
               transformOrigin: 'left center',
             }}
           />
-          {/* Traveling light — leads the line by ~4px, fades out at the end */}
+          {/* Traveling light — top: -7px centers the 14px glow on the 1px line.
+              Only x is animated so there is no CSS transform conflict.          */}
           <motion.div
             initial={{ x: -6, opacity: 0 }}
             animate={{ x: 40, opacity: [0, 1, 1, 0] }}
@@ -310,12 +311,11 @@ export function HeroBanner() {
             }}
             style={{
               position: 'absolute',
-              top: '50%',
+              top: '-7px',
               left: 0,
               width: '14px',
               height: '14px',
               borderRadius: '50%',
-              transform: 'translate(-50%, -50%)',
               background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.55) 35%, rgba(255,255,255,0.12) 65%, transparent 100%)',
               pointerEvents: 'none',
             }}
@@ -328,7 +328,7 @@ export function HeroBanner() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.8, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           style={{
-            fontSize:   'clamp(15px, 1.6vw, 21px)',
+            fontSize:   'clamp(13px, 3.5vw, 21px)',
             fontStyle:  'italic',
             fontWeight: 400,
             lineHeight: 1.7,

@@ -164,7 +164,7 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
           className="font-body"
           style={{
             position:      'absolute',
-            bottom:        '20px',
+            bottom:        'calc(max(20px, env(safe-area-inset-bottom, 0px)) + 10px)',
             right:         '24px',
             fontSize:      '9px',
             letterSpacing: '0.22em',
