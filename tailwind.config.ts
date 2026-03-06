@@ -15,6 +15,8 @@ const config: Config = {
       fontFamily: {
         heading: ['var(--font-playfair)', 'Georgia', 'serif'],
         body: ['var(--font-opensans)', 'system-ui', 'sans-serif'],
+        neue: ['NeueMontreal', '-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'sans-serif'],
+        dm: ['var(--font-dm)', 'system-ui', 'sans-serif'],
       },
     },
   },
