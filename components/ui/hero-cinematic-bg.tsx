@@ -2,27 +2,6 @@
 
 import { motion } from 'motion/react'
 
-/* ──────────────────────────────────────────────────────────────────────────
-   Serpentine film strip — "a continuous reel flowing through time"
-
-   Six thin strips of film stills run across the hero.  Odd rows flow
-   left-to-right, even rows right-to-left — like a single strip of 35mm
-   film looping through the gate of a projector, folding back on itself.
-
-   Each strip:
-     • Frames are actual stills from all three films, interleaved
-     • Near-monochrome + dark filter → looks like a film negative
-     • Thin 1px border → classic film-frame edge
-     • Strip-edge lines → the opaque edge of a physical film strip
-     • Seamless infinite scroll via doubled content array
-
-   The whole canvas fades to black at the left/right section edges
-   (CSS mask) so strips feel like they're emerging from and returning
-   to darkness — i.e. emerging from the projector beam.
-   ────────────────────────────────────────────────────────────────────────── */
-
-/* The frames — interleaved across all three films for variety.
-   Doubled inside the marquee for seamless infinite scroll.              */
 const FRAMES = [
   '/film_grabs/tim-1.png',
   '/film_grabs/thy-1.jpg',
@@ -38,34 +17,52 @@ const FRAMES = [
   '/film_grabs/sov-4.png',
 ]
 
-const DOUBLED = [...FRAMES, ...FRAMES]   // duplicate for seamless loop
+const DOUBLED = [...FRAMES, ...FRAMES]
 
-/* Each strip: vertical position, direction, speed, opacity.
-   Alternating dir creates the snake / serpentine effect.                */
 const STRIPS = [
-  { top:  '5%', dir: -1, dur: 42, op: 0.22 },   // ← left
-  { top: '21%', dir:  1, dur: 38, op: 0.18 },   // → right
-  { top: '37%', dir: -1, dur: 46, op: 0.24 },   // ← left
-  { top: '54%', dir:  1, dur: 40, op: 0.19 },   // → right
-  { top: '70%', dir: -1, dur: 44, op: 0.21 },   // ← left
-  { top: '86%', dir:  1, dur: 36, op: 0.17 },   // → right
+  { top:  '5%', dir: -1, dur: 42, op: 0.22 },
+  { top: '21%', dir:  1, dur: 38, op: 0.18 },
+  { top: '37%', dir: -1, dur: 46, op: 0.24 },
+  { top: '54%', dir:  1, dur: 40, op: 0.19 },
+  { top: '70%', dir: -1, dur: 44, op: 0.21 },
+  { top: '86%', dir:  1, dur: 36, op: 0.17 },
 ]
 
-const FRAME_W  = 148   // px — thin, cinematic landscape frame
-const FRAME_H  = 93    // px
-const GAP      = 3     // px gap between frames (like a splice mark)
+const FRAME_W    = 148   // image frame width
+const FRAME_H    = 88    // image frame height
+const SPROCKET_H = 14    // sprocket band height (top + bottom)
+const TOTAL_H    = SPROCKET_H + FRAME_H + SPROCKET_H  // 116px
+const GAP        = 0     // no gap — strip reads as one continuous piece
 
-/* Width of one complete set of frames — used to compute seamless loop  */
 const SET_W = FRAMES.length * (FRAME_W + GAP)
 
-/* Common image style — near-monochrome, underexposed                   */
 const IMG: React.CSSProperties = {
-  width:      '100%',
-  height:     '100%',
-  objectFit:  'cover',
+  width:          '100%',
+  height:         '100%',
+  objectFit:      'cover',
   objectPosition: 'center',
-  filter: 'saturate(0.18) brightness(0.50) contrast(1.08)',
-  display: 'block',
+  filter:         'saturate(0.18) brightness(0.50) contrast(1.08)',
+  display:        'block',
+}
+
+/* Sprocket band — the dark edge of the physical film strip */
+const BAND: React.CSSProperties = {
+  height:          SPROCKET_H,
+  background:      'rgba(18,16,13,0.97)',
+  display:         'flex',
+  alignItems:      'center',
+  justifyContent:  'space-around',
+  padding:         '0 20px',
+}
+
+/* Individual perforation hole */
+const HOLE: React.CSSProperties = {
+  width:        10,
+  height:       7,
+  background:   '#0B0B0B',
+  border:       '1px solid rgba(154,154,154,0.18)',
+  borderRadius: 2,
+  flexShrink:   0,
 }
 
 export function HeroCinematicBg() {
@@ -77,18 +74,13 @@ export function HeroCinematicBg() {
         inset:           0,
         overflow:        'hidden',
         pointerEvents:   'none',
-        /* Fade the entire strip canvas at both section edges so strips
-           appear to emerge from and return to darkness.                */
         WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, transparent 100%)',
         maskImage:       'linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, transparent 100%)',
       }}
     >
       {STRIPS.map((strip, si) => {
-        /* Seamless marquee: left-flowing strips animate from 0 → -SET_W,
-           right-flowing strips animate from -SET_W → 0.  Both jump back
-           to the start value invisibly since the content repeats.      */
-        const xFrom = strip.dir === -1 ? 0       : -SET_W
-        const xTo   = strip.dir === -1 ? -SET_W  : 0
+        const xFrom = strip.dir === -1 ? 0      : -SET_W
+        const xTo   = strip.dir === -1 ? -SET_W : 0
 
         return (
           <div
@@ -99,48 +91,58 @@ export function HeroCinematicBg() {
               left:     0,
               right:    0,
               opacity:  strip.op,
+              overflow: 'hidden',
+              height:   TOTAL_H,
             }}
           >
-            {/* Top film-edge line */}
-            <div style={{ height: 1, background: 'rgba(154,154,154,0.07)' }} />
+            <motion.div
+              style={{
+                display:    'flex',
+                width:      'max-content',
+                height:     '100%',
+                willChange: 'transform',
+              }}
+              animate={{ x: [xFrom, xTo] }}
+              transition={{
+                duration: strip.dur,
+                ease:     'linear',
+                repeat:   Infinity,
+              }}
+            >
+              {DOUBLED.map((src, fi) => (
+                <div
+                  key={fi}
+                  style={{
+                    width:       FRAME_W,
+                    flexShrink:  0,
+                    display:     'flex',
+                    flexDirection: 'column',
+                    /* Thin vertical splice line between frames */
+                    borderRight: '1px solid rgba(0,0,0,0.6)',
+                  }}
+                >
+                  {/* Top sprocket band with 3 holes */}
+                  <div style={BAND}>
+                    <div style={HOLE} />
+                    <div style={HOLE} />
+                    <div style={HOLE} />
+                  </div>
 
-            {/* Scrolling strip */}
-            <div style={{ overflow: 'hidden', height: FRAME_H }}>
-              <motion.div
-                style={{
-                  display:     'flex',
-                  gap:         GAP,
-                  width:       'max-content',
-                  height:      '100%',
-                  willChange:  'transform',
-                }}
-                animate={{ x: [xFrom, xTo] }}
-                transition={{
-                  duration:    strip.dur,
-                  ease:        'linear',
-                  repeat:      Infinity,
-                }}
-              >
-                {DOUBLED.map((src, fi) => (
-                  <div
-                    key={fi}
-                    style={{
-                      width:     FRAME_W,
-                      height:    FRAME_H,
-                      flexShrink: 0,
-                      border:    '1px solid rgba(242,242,242,0.08)',
-                      overflow:  'hidden',
-                    }}
-                  >
+                  {/* Image frame */}
+                  <div style={{ height: FRAME_H, overflow: 'hidden' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={src} alt="" style={IMG} draggable={false} />
                   </div>
-                ))}
-              </motion.div>
-            </div>
 
-            {/* Bottom film-edge line */}
-            <div style={{ height: 1, background: 'rgba(154,154,154,0.07)' }} />
+                  {/* Bottom sprocket band with 3 holes */}
+                  <div style={BAND}>
+                    <div style={HOLE} />
+                    <div style={HOLE} />
+                    <div style={HOLE} />
+                  </div>
+                </div>
+              ))}
+            </motion.div>
           </div>
         )
       })}
