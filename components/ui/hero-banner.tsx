@@ -113,20 +113,45 @@ const STILLS: Still[] = [
     filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
     initialX: '-44vw', initialY: '-37vh',
   },
+  // ── Inner fill — occupies gaps between outer columns ───────────────────
+  { // i=12 top-[11%] left-[17%]  final-centre ≈ 27vw, 17vh
+    src: '/film_grabs/grab-02.png',    w: 3600, h: 2338, depth: 3.2,
+    posClass: 'top-[11%] left-[17%]', rotation: '-1.4deg', size: 'w-[200px] h-[130px]',
+    filmId: 'film-1', filmTitle: 'This Is My Moment..',
+    initialX: '28vw',  initialY: '27vh',
+  },
+  { // i=13 top-[8%]  right-[17%]  final-centre ≈ 74vw, 14vh
+    src: '/film_grabs/grab-04.png',    w: 3600, h: 2338, depth: 4.8,
+    posClass: 'top-[8%]  right-[17%]',rotation: '1.7deg',  size: 'w-[195px] h-[127px]',
+    filmId: 'film-1', filmTitle: 'This Is My Moment..',
+    initialX: '-24vw', initialY: '30vh',
+  },
+  { // i=14 top-[78%] left-[16%]  final-centre ≈ 27vw, 85vh
+    src: '/film_grabs/grab-06.png',    w: 3600, h: 2338, depth: 3.0,
+    posClass: 'top-[78%] left-[16%]', rotation: '-0.8deg', size: 'w-[215px] h-[139px]',
+    filmId: 'film-1', filmTitle: 'This Is My Moment..',
+    initialX: '23vw',  initialY: '-41vh',
+  },
+  { // i=15 top-[85%] right-[15%]  final-centre ≈ 74vw, 92vh
+    src: '/film_grabs/grab-07.png',    w: 3600, h: 2338, depth: 5.5,
+    posClass: 'top-[85%] right-[15%]',rotation: '2.2deg',  size: 'w-[205px] h-[133px]',
+    filmId: 'film-1', filmTitle: 'This Is My Moment..',
+    initialX: '-24vw', initialY: '-48vh',
+  },
 ]
 
 function scrollToFilm(filmId: string) {
   document.getElementById(filmId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-/* ── background-clip tile grid (4 cols × 3 rows) ─────────────────────────
-   Each image fills exactly one 25%×33.34% cell of the heading element.
+/* ── background-clip tile grid (4 cols × 4 rows) ─────────────────────────
+   Each image fills exactly one 25%×25% cell of the heading element.
    The cells are clipped to letter shapes by  background-clip: text.       */
 const COL_POS = ['0%', '33.33%', '66.67%', '100%']
-const ROW_POS = ['0%', '50%', '100%']
+const ROW_POS = ['0%', '33.33%', '66.67%', '100%']
 
 const tileBgImage    = STILLS.map(s => `url(${s.src})`).join(', ')
-const tileBgSize     = STILLS.map(() => '25% 33.34%').join(', ')
+const tileBgSize     = STILLS.map(() => '25% 25%').join(', ')
 const tileBgPosition = STILLS.map((_, i) => `${COL_POS[i % 4]} ${ROW_POS[Math.floor(i / 4)]}`).join(', ')
 const tileBgRepeat   = STILLS.map(() => 'no-repeat').join(', ')
 
