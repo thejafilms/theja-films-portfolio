@@ -60,6 +60,7 @@ body::after {
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .snap-container::-webkit-scrollbar {
@@ -69,5 +70,4 @@ body::after {
 .snap-section {
   height: 100%;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
 }

@@ -13,7 +13,7 @@ export function IntroGate({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <FilmIntro onComplete={onComplete} />
+      {!ready && <FilmIntro onComplete={onComplete} />}
       {ready && children}
     </>
   )
