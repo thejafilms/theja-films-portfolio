@@ -23,7 +23,8 @@ const FRAMES = [
   '/film_grabs/moment-1.png',
 ]
 
-type Phase = 'flipping' | 'flash' | 'reveal' | 'exit'
+/* No 'reveal' phase — the name appears once only, in the HeroBanner */
+type Phase = 'flipping' | 'flash' | 'exit'
 
 export function FilmIntro({ onComplete }: { onComplete: () => void }) {
   const [phase,    setPhase]    = useState<Phase>('flipping')
@@ -52,9 +53,6 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
     // Preload all frames for instant cycling
     FRAMES.forEach(src => { const img = new Image(); img.src = src })
 
-    /* Self-rescheduling tick — reads `speed` by reference so acceleration
-       works without recreating the closure. Each tick pushes its own ID so
-       cancelAll() can reach it. No clearInterval needed. */
     let speed = 150
     let frame = 0
 
@@ -71,21 +69,17 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
     ids.current.push(setTimeout(() => { speed = 40  }, 1300))
     ids.current.push(setTimeout(() => { speed = 22  }, 1900))
 
-    // Flash → reveal → exit → done
-    // Note: post-flash timers are pushed AFTER stopped=true so tick won't
-    // interfere, but cancelAll() can still reach them via ids.current.
+    // Flash → exit (no logo reveal — name appears once in the HeroBanner)
     ids.current.push(setTimeout(() => {
-      stopped.current = true    // halt the cycling tick
+      stopped.current = true
       setPhase('flash')
 
-      const r = setTimeout(() => setPhase('reveal'), 330)
-      ids.current.push(r)
-
+      // 330ms later: flash fades out, overlay begins fading to black
       const e = setTimeout(() => {
         setPhase('exit')
-        const d = setTimeout(() => onComplete(), 750)
+        const d = setTimeout(() => onComplete(), 700)
         ids.current.push(d)
-      }, 1300)
+      }, 330)
       ids.current.push(e)
     }, 2450))
 
@@ -93,10 +87,8 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  /* ── Derived booleans ─────────────────────────────────────────────────── */
   const isFlipping = phase === 'flipping'
   const isFlash    = phase === 'flash'
-  const isReveal   = phase === 'reveal'
   const isExit     = phase === 'exit'
 
   return (
@@ -110,7 +102,7 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
         overflow:   'hidden',
         cursor:     'pointer',
         opacity:    isExit ? 0 : 1,
-        transition: isExit ? 'opacity 0.7s ease' : 'none',
+        transition: isExit ? 'opacity 0.65s ease' : 'none',
       }}
     >
 
@@ -166,41 +158,7 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
         transition:    isFlash ? 'none' : 'opacity 0.48s ease',
       }} />
 
-      {/* ── 6. Logo reveal ──────────────────────────────────────────────── */}
-      {(isReveal || isExit) && (
-        <div style={{
-          position:       'absolute',
-          inset:          0,
-          display:        'flex',
-          flexDirection:  'column',
-          alignItems:     'center',
-          justifyContent: 'center',
-          gap:            '20px',
-        }}>
-          <h1
-            className="font-heading"
-            style={{
-              color:         '#F2F2F2',
-              fontSize:      'clamp(44px, 8vw, 116px)',
-              fontWeight:    400,
-              letterSpacing: '-0.02em',
-              lineHeight:    1,
-              margin:        0,
-              animation:     'introLogo 0.65s cubic-bezier(0.16, 1, 0.3, 1) both',
-            }}
-          >
-            THEJA MITTA
-          </h1>
-          <div style={{
-            width:      '40px',
-            height:     '1px',
-            background: 'rgba(242,242,242,0.28)',
-            animation:  'introRule 0.65s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both',
-          }} />
-        </div>
-      )}
-
-      {/* ── 7. Skip hint ────────────────────────────────────────────────── */}
+      {/* ── 6. Skip hint ────────────────────────────────────────────────── */}
       {isFlipping && (
         <p
           className="font-body"
@@ -219,17 +177,6 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
           Tap to skip
         </p>
       )}
-
-      <style>{`
-        @keyframes introLogo {
-          from { opacity: 0; transform: scale(0.93); }
-          to   { opacity: 1; transform: scale(1);    }
-        }
-        @keyframes introRule {
-          from { opacity: 0; transform: scaleX(0); }
-          to   { opacity: 1; transform: scaleX(1); }
-        }
-      `}</style>
     </div>
   )
 }
