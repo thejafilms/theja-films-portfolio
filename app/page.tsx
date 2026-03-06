@@ -28,7 +28,7 @@ const FILMS = [
     title: 'Theyyam – A God Awakens',
     location: 'Kannur, Kerala, India',
     description:
-      'An ancient ritualistic performance from North Kerala where performers channel the energy of deities — filmed during late-night ceremonies and temple festivals in Kannur.',
+      'In the temples of North Kerala, ancient rituals come alive through Theyyam — a sacred performance where performers embody deities through fire, dance, and devotion. A cinematic glimpse into one of India’s most powerful living traditions.',
     year: '2025',
     category: 'Personal',
     lazy: true,
@@ -40,7 +40,7 @@ const FILMS = [
     title: 'The Soul of Varanasi',
     location: 'Varanasi, India',
     description:
-      '"Flames rise. The river flows. Life moves on." A personal journey through Dev Diwali — where death is embraced with faith, and every step holds deep reverence.',
+      'Along the ghats of the Ganges, life unfolds between fire, water, and devotion. A visual portrait capturing the rhythm, spirituality, and human stories that define Varanasi.',
     year: '2025',
     category: 'Personal',
     lazy: true,
