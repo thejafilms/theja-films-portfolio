@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'motion/react'
 import Floating, { FloatingElement } from '@/components/ui/parallax-floating'
+import { HeroCinematicBg } from '@/components/ui/hero-cinematic-bg'
 
 /* ──────────────────────────────────────────────────────────────────────────
    ANIMATION — "Images emerge from Theja Mitta"
@@ -182,6 +183,9 @@ const REVEAL_EASE = [0.4, 0, 0.2, 1] as const       // smooth white text materia
 export function HeroBanner() {
   return (
     <section className="snap-section relative overflow-hidden bg-[#0B0B0B]">
+
+      {/* ── LAYER 0  Cinematic background — bokeh, sparks, travel arcs ────── */}
+      <HeroCinematicBg />
 
       {/* ── LAYER B  Floating images ──────────────────────────────────────────
           All invisible at t=0.  Each starts with initialX/Y that puts its
