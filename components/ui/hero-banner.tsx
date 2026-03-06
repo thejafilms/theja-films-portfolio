@@ -39,104 +39,115 @@ interface Still {
 }
 
 const STILLS: Still[] = [
-  // ── Left column ────────────────────────────────────────────────────────
-  { // i=0  top-[1%]  left-[0%]   final-centre ≈ 10vw, 11vh
-    src: '/film_grabs/grab-01.png',    w: 3600, h: 2338, depth: 2.2,
-    posClass: 'top-[1%]  left-[0%]',  rotation: '-1.8deg', size: 'w-[290px] h-[188px]',
+  // ── Left column — 9 images, films interleaved top-to-bottom ────────────
+  { // i=0  top-[1%]   left-[0%]   TIM  centre≈9vw,11vh
+    src: '/film_grabs/tim-1.png',    w: 3600, h: 2338, depth: 2.2,
+    posClass: 'top-[1%]   left-[0%]',  rotation: '-1.8deg', size: 'w-[260px] h-[169px]',
     filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '40vw',  initialY: '33vh',
+    initialX: '41vw',  initialY: '33vh',
   },
-  { // i=1  top-[21%] left-[1%]   final-centre ≈  7vw, 28vh
-    src: '/film_grabs/theyyam-4.jpg',  w: 3840, h: 2160, depth: 7.0,
-    posClass: 'top-[21%] left-[1%]',  rotation: '-2.2deg', size: 'w-[185px] h-[120px]',
+  { // i=1  top-[12%]  left-[1%]   THY  centre≈7vw,19vh
+    src: '/film_grabs/thy-1.jpg',    w: 3840, h: 2160, depth: 6.5,
+    posClass: 'top-[12%]  left-[1%]',  rotation: '-2.1deg', size: 'w-[185px] h-[104px]',
     filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
-    initialX: '43vw',  initialY: '16vh',
+    initialX: '43vw',  initialY: '25vh',
   },
-  { // i=2  top-[34%] left-[-1%]  final-centre ≈  8vw, 43vh
-    src: '/film_grabs/grab-05.png',    w: 3600, h: 2338, depth: 1.8,
-    posClass: 'top-[34%] left-[-1%]', rotation: '-1.2deg', size: 'w-[250px] h-[162px]',
-    filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '42vw',  initialY:  '1vh',
-  },
-  { // i=3  top-[52%] left-[0%]   final-centre ≈  8vw, 60vh
-    src: '/film_grabs/varanasi-3.png', w: 3600, h: 2338, depth: 4.6,
-    posClass: 'top-[52%] left-[0%]',  rotation: '-1.0deg', size: 'w-[220px] h-[143px]',
+  { // i=2  top-[23%]  left-[-1%]  SOV  centre≈7vw,30vh
+    src: '/film_grabs/sov-1.png',    w: 3600, h: 2338, depth: 1.8,
+    posClass: 'top-[23%]  left-[-1%]', rotation: '-1.2deg', size: 'w-[230px] h-[149px]',
     filmId: 'film-3', filmTitle: 'The Soul of Varanasi',
-    initialX: '42vw',  initialY: '-16vh',
+    initialX: '43vw',  initialY: '14vh',
   },
-  { // i=4  top-[68%] left-[2%]   final-centre ≈ 11vw, 78vh
-    src: '/film_grabs/varanasi-1.png', w: 2145, h: 1688, depth: 3.8,
-    posClass: 'top-[68%] left-[2%]',  rotation: '-1.6deg', size: 'w-[270px] h-[175px]',
+  { // i=3  top-[35%]  left-[0%]   TIM  centre≈7vw,42vh
+    src: '/film_grabs/tim-2.png',    w: 3600, h: 2338, depth: 4.2,
+    posClass: 'top-[35%]  left-[0%]',  rotation: '-1.0deg', size: 'w-[200px] h-[130px]',
+    filmId: 'film-1', filmTitle: 'This Is My Moment..',
+    initialX: '43vw',  initialY: '2vh',
+  },
+  { // i=4  top-[47%]  left-[1%]   THY  centre≈9vw,55vh
+    src: '/film_grabs/thy-2.jpg',    w: 3840, h: 2160, depth: 3.8,
+    posClass: 'top-[47%]  left-[1%]',  rotation: '-1.5deg', size: 'w-[245px] h-[138px]',
+    filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
+    initialX: '41vw',  initialY: '-11vh',
+  },
+  { // i=5  top-[58%]  left-[-1%]  SOV  centre≈6vw,65vh
+    src: '/film_grabs/sov-2.png',    w: 3600, h: 2338, depth: 5.0,
+    posClass: 'top-[58%]  left-[-1%]', rotation: '-0.8deg', size: 'w-[195px] h-[127px]',
     filmId: 'film-3', filmTitle: 'The Soul of Varanasi',
-    initialX: '39vw',  initialY: '-34vh',
+    initialX: '44vw',  initialY: '-21vh',
   },
-  { // i=5  top-[86%] left-[14%]  final-centre ≈ 22vw, 94vh
-    src: '/film_grabs/grab-03.png',    w: 3600, h: 2338, depth: 2.8,
-    posClass: 'top-[86%] left-[14%]', rotation: '-0.9deg', size: 'w-[230px] h-[149px]',
+  { // i=6  top-[70%]  left-[0%]   TIM  centre≈7vw,78vh
+    src: '/film_grabs/tim-3.png',    w: 3600, h: 2338, depth: 2.6,
+    posClass: 'top-[70%]  left-[0%]',  rotation: '-1.3deg', size: 'w-[215px] h-[139px]',
     filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '28vw',  initialY: '-50vh',
+    initialX: '43vw',  initialY: '-34vh',
   },
-  // ── Right column ───────────────────────────────────────────────────────
-  { // i=6  top-[1%]  right-[2%]  final-centre ≈ 91vw,  8vh
-    src: '/film_grabs/moment-1.png',   w: 3600, h: 2338, depth: 3.5,
-    posClass: 'top-[1%]  right-[2%]', rotation: '1.8deg',  size: 'w-[200px] h-[130px]',
-    filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '-41vw', initialY: '36vh',
-  },
-  { // i=7  top-[15%] right-[2%]  final-centre ≈ 91vw, 23vh
-    src: '/film_grabs/theyyam-1.jpg',  w: 3840, h: 2160, depth: 5.2,
-    posClass: 'top-[15%] right-[2%]', rotation: '2.0deg',  size: 'w-[210px] h-[136px]',
+  { // i=7  top-[81%]  left-[2%]   THY  centre≈8vw,88vh
+    src: '/film_grabs/thy-3.jpg',    w: 3840, h: 2160, depth: 4.8,
+    posClass: 'top-[81%]  left-[2%]',  rotation: '-2.0deg', size: 'w-[180px] h-[101px]',
     filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
-    initialX: '-41vw', initialY: '21vh',
+    initialX: '42vw',  initialY: '-44vh',
   },
-  { // i=8  top-[30%] right-[0%]  final-centre ≈ 93vw, 37vh
-    src: '/film_grabs/theyyam-2.jpg',  w: 3840, h: 2160, depth: 6.2,
-    posClass: 'top-[30%] right-[0%]', rotation: '1.4deg',  size: 'w-[195px] h-[127px]',
-    filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
-    initialX: '-43vw', initialY:  '7vh',
-  },
-  { // i=9  top-[44%] right-[14%] final-centre ≈ 79vw, 51vh
-    src: '/film_grabs/theyyam-3.jpg',  w: 3840, h: 2160, depth: 4.4,
-    posClass: 'top-[44%] right-[14%]',rotation: '1.1deg',  size: 'w-[200px] h-[130px]',
-    filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
-    initialX: '-29vw', initialY:  '-7vh',
-  },
-  { // i=10 top-[58%] right-[1%]  final-centre ≈ 91vw, 66vh
-    src: '/film_grabs/varanasi-2.jpg', w: 3840, h: 2160, depth: 3.2,
-    posClass: 'top-[58%] right-[1%]', rotation: '1.2deg',  size: 'w-[240px] h-[156px]',
+  { // i=8  top-[91%]  left-[14%]  SOV  centre≈20vw,97vh
+    src: '/film_grabs/sov-3.png',    w: 3600, h: 2338, depth: 3.2,
+    posClass: 'top-[91%]  left-[14%]', rotation: '-0.7deg', size: 'w-[185px] h-[120px]',
     filmId: 'film-3', filmTitle: 'The Soul of Varanasi',
-    initialX: '-41vw', initialY: '-22vh',
+    initialX: '30vw',  initialY: '-53vh',
   },
-  { // i=11 top-[75%] right-[0%]  final-centre ≈ 91vw, 81vh
-    src: '/film_grabs/theyyam-5.jpg',  w: 3840, h: 2160, depth: 5.8,
-    posClass: 'top-[75%] right-[0%]', rotation: '2.5deg',  size: 'w-[175px] h-[114px]',
+  // ── Right column — 9 images, films interleaved top-to-bottom ───────────
+  { // i=9  top-[1%]   right-[2%]  SOV  centre≈91vw,9vh
+    src: '/film_grabs/sov-4.png',    w: 3600, h: 2338, depth: 3.5,
+    posClass: 'top-[1%]   right-[2%]', rotation: '1.8deg',  size: 'w-[190px] h-[123px]',
+    filmId: 'film-3', filmTitle: 'The Soul of Varanasi',
+    initialX: '-41vw', initialY: '35vh',
+  },
+  { // i=10 top-[12%]  right-[1%]  TIM  centre≈92vw,20vh
+    src: '/film_grabs/tim-4.png',    w: 3600, h: 2338, depth: 5.0,
+    posClass: 'top-[12%]  right-[1%]', rotation: '1.6deg',  size: 'w-[210px] h-[136px]',
+    filmId: 'film-1', filmTitle: 'This Is My Moment..',
+    initialX: '-42vw', initialY: '24vh',
+  },
+  { // i=11 top-[23%]  right-[0%]  THY  centre≈93vw,30vh
+    src: '/film_grabs/thy-4.jpg',    w: 3840, h: 2160, depth: 7.0,
+    posClass: 'top-[23%]  right-[0%]', rotation: '2.2deg',  size: 'w-[195px] h-[110px]',
     filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
-    initialX: '-44vw', initialY: '-37vh',
+    initialX: '-43vw', initialY: '14vh',
   },
-  // ── Inner fill — occupies gaps between outer columns ───────────────────
-  { // i=12 top-[11%] left-[17%]  final-centre ≈ 27vw, 17vh
-    src: '/film_grabs/grab-02.png',    w: 3600, h: 2338, depth: 3.2,
-    posClass: 'top-[11%] left-[17%]', rotation: '-1.4deg', size: 'w-[200px] h-[130px]',
-    filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '28vw',  initialY: '27vh',
+  { // i=12 top-[35%]  right-[14%] SOV  centre≈80vw,43vh
+    src: '/film_grabs/sov-5.png',    w: 2145, h: 1688, depth: 4.0,
+    posClass: 'top-[35%]  right-[14%]',rotation: '1.0deg',  size: 'w-[165px] h-[130px]',
+    filmId: 'film-3', filmTitle: 'The Soul of Varanasi',
+    initialX: '-30vw', initialY: '1vh',
   },
-  { // i=13 top-[8%]  right-[17%]  final-centre ≈ 74vw, 14vh
-    src: '/film_grabs/grab-04.png',    w: 3600, h: 2338, depth: 4.8,
-    posClass: 'top-[8%]  right-[17%]',rotation: '1.7deg',  size: 'w-[195px] h-[127px]',
+  { // i=13 top-[47%]  right-[0%]  TIM  centre≈92vw,55vh
+    src: '/film_grabs/tim-5.png',    w: 3600, h: 2338, depth: 2.8,
+    posClass: 'top-[47%]  right-[0%]', rotation: '1.4deg',  size: 'w-[240px] h-[156px]',
     filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '-24vw', initialY: '30vh',
+    initialX: '-42vw', initialY: '-11vh',
   },
-  { // i=14 top-[78%] left-[16%]  final-centre ≈ 27vw, 85vh
-    src: '/film_grabs/grab-06.png',    w: 3600, h: 2338, depth: 3.0,
-    posClass: 'top-[78%] left-[16%]', rotation: '-0.8deg', size: 'w-[215px] h-[139px]',
-    filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '23vw',  initialY: '-41vh',
+  { // i=14 top-[59%]  right-[1%]  THY  centre≈92vw,66vh
+    src: '/film_grabs/thy-5.jpg',    w: 3840, h: 2160, depth: 5.5,
+    posClass: 'top-[59%]  right-[1%]', rotation: '2.0deg',  size: 'w-[205px] h-[115px]',
+    filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
+    initialX: '-42vw', initialY: '-22vh',
   },
-  { // i=15 top-[85%] right-[15%]  final-centre ≈ 74vw, 92vh
-    src: '/film_grabs/grab-07.png',    w: 3600, h: 2338, depth: 5.5,
-    posClass: 'top-[85%] right-[15%]',rotation: '2.2deg',  size: 'w-[205px] h-[133px]',
+  { // i=15 top-[71%]  right-[0%]  SOV  centre≈93vw,78vh
+    src: '/film_grabs/sov-6.png',    w: 3024, h: 1964, depth: 3.0,
+    posClass: 'top-[71%]  right-[0%]', rotation: '1.1deg',  size: 'w-[185px] h-[120px]',
+    filmId: 'film-3', filmTitle: 'The Soul of Varanasi',
+    initialX: '-43vw', initialY: '-34vh',
+  },
+  { // i=16 top-[82%]  right-[2%]  TIM  centre≈90vw,88vh
+    src: '/film_grabs/tim-6.png',    w: 3600, h: 2338, depth: 6.0,
+    posClass: 'top-[82%]  right-[2%]', rotation: '1.8deg',  size: 'w-[175px] h-[114px]',
     filmId: 'film-1', filmTitle: 'This Is My Moment..',
-    initialX: '-24vw', initialY: '-48vh',
+    initialX: '-40vw', initialY: '-44vh',
+  },
+  { // i=17 top-[91%]  right-[14%] THY  centre≈79vw,97vh
+    src: '/film_grabs/thy-6.jpg',    w: 3840, h: 2160, depth: 4.5,
+    posClass: 'top-[91%]  right-[14%]',rotation: '2.4deg',  size: 'w-[195px] h-[110px]',
+    filmId: 'film-2', filmTitle: 'Theyyam – A God Awakens',
+    initialX: '-29vw', initialY: '-53vh',
   },
 ]
 
@@ -144,15 +155,15 @@ function scrollToFilm(filmId: string) {
   document.getElementById(filmId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-/* ── background-clip tile grid (4 cols × 4 rows) ─────────────────────────
-   Each image fills exactly one 25%×25% cell of the heading element.
+/* ── background-clip tile grid (3 cols × 6 rows = 18 cells) ──────────────
+   Each image fills exactly one 33.33%×16.67% cell of the heading element.
    The cells are clipped to letter shapes by  background-clip: text.       */
-const COL_POS = ['0%', '33.33%', '66.67%', '100%']
-const ROW_POS = ['0%', '33.33%', '66.67%', '100%']
+const COL_POS = ['0%', '50%', '100%']
+const ROW_POS = ['0%', '20%', '40%', '60%', '80%', '100%']
 
 const tileBgImage    = STILLS.map(s => `url(${s.src})`).join(', ')
-const tileBgSize     = STILLS.map(() => '25% 25%').join(', ')
-const tileBgPosition = STILLS.map((_, i) => `${COL_POS[i % 4]} ${ROW_POS[Math.floor(i / 4)]}`).join(', ')
+const tileBgSize     = STILLS.map(() => '33.33% 16.67%').join(', ')
+const tileBgPosition = STILLS.map((_, i) => `${COL_POS[i % 3]} ${ROW_POS[Math.floor(i / 3)]}`).join(', ')
 const tileBgRepeat   = STILLS.map(() => 'no-repeat').join(', ')
 
 const H1_STYLE = {
@@ -265,7 +276,7 @@ export function HeroBanner() {
 
           {/* LAYER A — letter-shaped image mosaic ─────────────────────────
               Rendered from frame 1 by pure CSS.  No JS needed.
-              background-clip: text clips the 4×3 tile grid to letter shapes.
+              background-clip: text clips the 3×6 tile grid to letter shapes.
               brightness(1.6) ensures the tiles are legible against dark bg. */}
           <motion.h1
             className="font-heading"
