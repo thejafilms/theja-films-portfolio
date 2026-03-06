@@ -283,12 +283,44 @@ export function HeroBanner() {
 
         </div>
 
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 2.6, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          style={{ width: '36px', height: '1px', background: '#9A9A9A', opacity: 0.4, marginBottom: '26px' }}
-        />
+        {/* Separator — camera-light draw effect */}
+        <div style={{ position: 'relative', width: '36px', height: '1px', marginBottom: '26px', overflow: 'visible' }}>
+          {/* The line: draws left-to-right at linear pace */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 2.6, duration: 0.5, ease: 'linear' }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: '#9A9A9A',
+              opacity: 0.45,
+              transformOrigin: 'left center',
+            }}
+          />
+          {/* Traveling light — leads the line by ~4px, fades out at the end */}
+          <motion.div
+            initial={{ x: -6, opacity: 0 }}
+            animate={{ x: 40, opacity: [0, 1, 1, 0] }}
+            transition={{
+              delay: 2.6,
+              duration: 0.5,
+              ease: 'linear',
+              opacity: { times: [0, 0.06, 0.78, 1] },
+            }}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              width: '14px',
+              height: '14px',
+              borderRadius: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.55) 35%, rgba(255,255,255,0.12) 65%, transparent 100%)',
+              pointerEvents: 'none',
+            }}
+          />
+        </div>
 
         <motion.p
           className="font-heading text-[#9A9A9A]"
