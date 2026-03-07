@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'motion/react'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 /* ──────────────────────────────────────────────────────────────────────────
    Hero — Contact Sheet
@@ -62,6 +62,30 @@ const EASE = [0.16, 1, 0.3, 1] as const
 
 export function HeroBannerContact() {
   const [hovered, setHovered] = useState<number | null>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  /* On touch devices (no hover), auto-cycle a random coloured frame every
+     ~1.8 s — gives mobile visitors the same colour-reveal sensation.        */
+  useEffect(() => {
+    if (!window.matchMedia('(hover: none)').matches) return
+
+    timerRef.current = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        setHovered(prev => {
+          let next: number
+          do { next = Math.floor(Math.random() * CELLS.length) }
+          while (next === prev)
+          return next
+        })
+      }, 1800)
+    }, 2500)  // wait for entry animation to finish
+
+    return () => {
+      if (timerRef.current)   clearTimeout(timerRef.current)
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  }, [])
 
   return (
     <section className="snap-section relative overflow-hidden bg-[#0B0B0B]">
@@ -86,6 +110,7 @@ export function HeroBannerContact() {
             }}
             initial="hidden"
             animate="visible"
+            /* whileHover only fires on pointer devices — safe to keep for desktop */
             whileHover="hovered"
             /* CSS transition handles the filter so the dim-others effect   *
              * (driven by React state) stays outside Framer Motion's cycle. */

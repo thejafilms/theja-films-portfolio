@@ -23,14 +23,12 @@ const FRAMES = [
   '/film_grabs/moment-1.png',
 ]
 
-/* No 'reveal' phase — the name appears once only, in the HeroBanner */
-type Phase = 'flipping' | 'flash' | 'exit'
+type Phase = 'flipping' | 'flash' | 'reveal' | 'exit'
 
 export function FilmIntro({ onComplete }: { onComplete: () => void }) {
   const [phase,    setPhase]    = useState<Phase>('flipping')
   const [frameIdx, setFrameIdx] = useState(0)
 
-  /* All scheduled timeout IDs — so cleanup / skip can cancel everything */
   const ids     = useRef<ReturnType<typeof setTimeout>[]>([])
   const stopped = useRef(false)
 
@@ -50,7 +48,6 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
     ids.current = []
     stopped.current = false
 
-    // Preload all frames for instant cycling
     FRAMES.forEach(src => { const img = new Image(); img.src = src })
 
     let speed = 150
@@ -69,18 +66,23 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
     ids.current.push(setTimeout(() => { speed = 40  }, 1300))
     ids.current.push(setTimeout(() => { speed = 22  }, 1900))
 
-    // Flash → exit (no logo reveal — name appears once in the HeroBanner)
+    // 2450ms → white flash
     ids.current.push(setTimeout(() => {
       stopped.current = true
       setPhase('flash')
 
-      // 330ms later: flash fades out, overlay begins fading to black
-      const e = setTimeout(() => {
-        setPhase('exit')
-        const d = setTimeout(() => onComplete(), 700)
-        ids.current.push(d)
-      }, 330)
-      ids.current.push(e)
+      // 330ms later → logo reveal on black
+      ids.current.push(setTimeout(() => {
+        setPhase('reveal')
+
+        // 970ms later → overlay fades out
+        ids.current.push(setTimeout(() => {
+          setPhase('exit')
+
+          // 700ms later → main site mounts
+          ids.current.push(setTimeout(() => onComplete(), 700))
+        }, 970))
+      }, 330))
     }, 2450))
 
     return cancelAll
@@ -89,6 +91,7 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
 
   const isFlipping = phase === 'flipping'
   const isFlash    = phase === 'flash'
+  const isReveal   = phase === 'reveal'
   const isExit     = phase === 'exit'
 
   return (
@@ -148,7 +151,7 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '6%', background: '#000', pointerEvents: 'none' }} />
       </>}
 
-      {/* ── 5. White flash overlay (always rendered, opacity-driven) ─────── */}
+      {/* ── 5. White flash overlay ──────────────────────────────────────── */}
       <div style={{
         position:      'absolute',
         inset:         0,
@@ -158,7 +161,48 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
         transition:    isFlash ? 'none' : 'opacity 0.48s ease',
       }} />
 
-      {/* ── 6. Skip hint ────────────────────────────────────────────────── */}
+      {/* ── 6. Logo reveal ──────────────────────────────────────────────── */}
+      {(isReveal || isExit) && (
+        <div
+          style={{
+            position:       'absolute',
+            inset:          0,
+            display:        'flex',
+            flexDirection:  'column',
+            alignItems:     'center',
+            justifyContent: 'center',
+            pointerEvents:  'none',
+            gap:            0,
+          }}
+        >
+          <p
+            className="font-heading"
+            style={{
+              fontSize:      'clamp(44px, 8vw, 116px)',
+              fontWeight:    400,
+              letterSpacing: '-0.02em',
+              color:         '#F2F2F2',
+              margin:        0,
+              lineHeight:    1,
+              animation:     'introLogo 0.65s cubic-bezier(0.16,1,0.3,1) both',
+            }}
+          >
+            THEJA MITTA
+          </p>
+          <div
+            style={{
+              width:      '40px',
+              height:     '1px',
+              marginTop:  '18px',
+              background: 'rgba(242,242,242,0.28)',
+              animation:  'introRule 0.6s cubic-bezier(0.16,1,0.3,1) 0.15s both',
+              transformOrigin: 'left center',
+            }}
+          />
+        </div>
+      )}
+
+      {/* ── 7. Skip hint ────────────────────────────────────────────────── */}
       {isFlipping && (
         <p
           className="font-body"
@@ -177,6 +221,17 @@ export function FilmIntro({ onComplete }: { onComplete: () => void }) {
           Tap to skip
         </p>
       )}
+
+      <style>{`
+        @keyframes introLogo {
+          from { opacity: 0; transform: scale(0.93); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes introRule {
+          from { opacity: 0; transform: scaleX(0); }
+          to   { opacity: 1; transform: scaleX(1); }
+        }
+      `}</style>
     </div>
   )
 }
