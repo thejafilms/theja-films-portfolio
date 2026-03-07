@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'motion/react'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 /* ──────────────────────────────────────────────────────────────────────────
    Hero — Contact Sheet
@@ -62,16 +62,18 @@ const EASE = [0.16, 1, 0.3, 1] as const
 
 export function HeroBannerContact() {
   const [hovered, setHovered] = useState<number | null>(null)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const intervalRef    = useRef<ReturnType<typeof setInterval> | null>(null)
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const initTimerRef   = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isUserActive   = useRef(false)
 
-  /* On touch devices (no hover), auto-cycle a random coloured frame every
-     ~1.8 s — gives mobile visitors the same colour-reveal sensation.        */
+  /* Auto-cycle a random highlighted frame every 1.8 s (idle animation).
+     On desktop: pauses as soon as the mouse moves, resumes 3 s after it stops.
+     On touch: no mousemove events, so it runs continuously.                 */
   useEffect(() => {
-    if (!window.matchMedia('(hover: none)').matches) return
-
-    timerRef.current = setTimeout(() => {
+    initTimerRef.current = setTimeout(() => {
       intervalRef.current = setInterval(() => {
+        if (isUserActive.current) return
         setHovered(prev => {
           let next: number
           do { next = Math.floor(Math.random() * CELLS.length) }
@@ -79,16 +81,26 @@ export function HeroBannerContact() {
           return next
         })
       }, 1800)
-    }, 2500)  // wait for entry animation to finish
+    }, 2500) // wait for entry animation to finish
 
     return () => {
-      if (timerRef.current)   clearTimeout(timerRef.current)
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      if (initTimerRef.current)   clearTimeout(initTimerRef.current)
+      if (intervalRef.current)    clearInterval(intervalRef.current)
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
     }
   }, [])
 
+  /* Mark user as active on any mouse movement; resume auto-cycle 3 s later */
+  const handleMouseMove = useCallback(() => {
+    isUserActive.current = true
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = setTimeout(() => {
+      isUserActive.current = false
+    }, 3000)
+  }, [])
+
   return (
-    <section className="snap-section relative overflow-hidden bg-[#0B0B0B]">
+    <section className="snap-section relative overflow-hidden bg-[#0B0B0B]" onMouseMove={handleMouseMove}>
 
       {/* ── Contact-sheet grid ──────────────────────────────────────────── */}
       {/* 3 cols on mobile → 6 cols on sm+; rows fill the remaining height  */}
@@ -122,7 +134,7 @@ export function HeroBannerContact() {
                   : 'saturate(0.06) brightness(0.22)',
               transition: 'filter 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
-            onHoverStart={() => setHovered(i)}
+            onHoverStart={() => { isUserActive.current = true; setHovered(i) }}
             onHoverEnd={() => setHovered(null)}
             onClick={() => scrollToFilm(cell.filmId)}
           >
