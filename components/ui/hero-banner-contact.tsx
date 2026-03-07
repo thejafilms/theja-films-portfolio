@@ -50,7 +50,7 @@ function scrollToFilm(filmId: string) {
 }
 
 const LOGO_STYLE = {
-  fontSize:      '15px',
+  fontSize:      '20px',
   fontWeight:    700,
   letterSpacing: '0.08em',
   lineHeight:    1.0,
